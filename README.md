@@ -1,4 +1,4 @@
-# Trabajo final integrador ui - Matias Fuentes
+# Trabajo final integrador UI - Matias Fuentes
 
 ## Descripción del proyecto
 

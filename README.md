@@ -1,5 +1,4 @@
-# unq-ui-matias-fuentes-trabajo-final
-unq-ui-matias-fuentes-trabajo-final
+# Trabajo final integrador ui - Matias Fuentes
 
 ## Descripción del proyecto
 

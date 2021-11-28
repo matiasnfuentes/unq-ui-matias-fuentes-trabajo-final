@@ -1,0 +1,16 @@
+body{
+    height: 100vh;
+}
+
+.app{
+    height: 100vh;
+}
+
+.element{
+    margin: 10px 5px 10px 5px;
+}
+
+.element__image{
+    border: 1px solid black;
+    border-radius: 15px;
+}

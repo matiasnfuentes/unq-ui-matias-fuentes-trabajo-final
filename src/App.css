@@ -14,3 +14,7 @@ body{
     border: 1px solid black;
     border-radius: 15px;
 }
+
+.element__image:hover{
+    transform: scale(1.2);
+}

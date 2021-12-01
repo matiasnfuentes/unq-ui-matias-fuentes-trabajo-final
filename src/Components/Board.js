@@ -14,13 +14,16 @@ const Board = () => {
   const [clicked, setClicked] = useState()
   const [coincidences, setCoincidences] = useState([])
   const alreadyFounded = (id) => coincidences.includes(id)
-  const [finished, setGameFinished] = useState(false)
-  const [ganador, setGanador] = useState()
+  const [winner, setWinner] = useState()
+  const [currentTurn, setCurrentTurn] = useState(1)
+  const [playerOnePoints, setPlayerOnePoints] = useState(0)
+  const [playerTwoPoints, setPlayerOneTwo] = useState(0)
+
+  const oppositeTurn = () => (currentTurn === 1) ? 2 : 1  
 
   useEffect(() => {
     if(coincidences.length === itemsNeed){
-      setGanador("Jugador 1")
-      setGameFinished(true)
+      setWinner((playerOnePoints > playerTwoPoints) ? 1 : 2 )
       }
     }
   ,[coincidences])
@@ -36,6 +39,8 @@ const Board = () => {
   const hasConcidence = (id, rowPosition, callback, uniqueId) => {
     if (!alreadyFounded(id)){
       if (clicked && (id === clicked.id) && (uniqueId !== clicked.uniqueId)) {
+        (currentTurn === 1) ? setPlayerOnePoints(playerOnePoints + 1) : setPlayerOneTwo(playerTwoPoints + 1)
+        !singlePlayer && setCurrentTurn(oppositeTurn())
         setCoincidences([...coincidences,id])
         setClicked(undefined)
       } else if (clicked && (id !== clicked.id)){
@@ -44,6 +49,7 @@ const Board = () => {
           clicked.callback(clicked.rowPosition)
         }, [300]);
         setClicked(undefined)
+        !singlePlayer && setCurrentTurn(oppositeTurn())
       } else {
         setClicked({id, rowPosition, callback, uniqueId})
       }
@@ -52,13 +58,13 @@ const Board = () => {
 
   return (
     <div className="col-12">
-      <Puntuaciones singlePlayer={singlePlayer}/>
+      <Puntuaciones singlePlayer={singlePlayer} playerOnePoints={playerOnePoints} playerTwoPoints={playerTwoPoints} currentTurn={currentTurn}/>
       <div>
         {[...Array(rowsCount).keys()].map((r) => (
           <BoardRow elementsCount={rowsCount} key={`row-${r}`} elements={rowItems[r]} hasConcidence={hasConcidence} />
         ))}
       </div>
-      {finished && <GameFinished ganador={ganador}/> }
+      {winner && <GameFinished winner={winner}/> }
     </div>
   );
 };

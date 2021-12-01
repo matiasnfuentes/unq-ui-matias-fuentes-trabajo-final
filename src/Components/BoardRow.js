@@ -5,12 +5,12 @@ const BoardRow = ({ elementsCount, elements, hasConcidence }) => {
   const elementSize = elementsCount === 4 ? "col-2" : "col-1";
 
   const [imageList, setImageList] = useState(
-    [...Array(elementsCount)].map((e) => "./question.jpg")
+    [...Array(elementsCount)].map((e) => "./img/question.jpg")
   );
 
   const callback = (rowPosition) => {
     const newList = [...imageList];
-    newList[rowPosition] = "./question.jpg";
+    newList[rowPosition] = "./img/question.jpg";
     setImageList(newList);
   };
 

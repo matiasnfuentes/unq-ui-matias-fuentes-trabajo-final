@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "../App.css";
 import Board from "./Board";
+import GameFinished from "./GameFinished";
 import Seleccion from "./SelectionScreen";
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
         <Routes>
           <Route exact path="/" element={<Seleccion />} />
           <Route exact path="/board" element={<Board/>} />
+          <Route exact path="/game-finished" element={<GameFinished/>} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BoardRow from "./BoardRow";
+import GameFinished from "./GameFinished";
 import getRandom from "./Items";
 import Puntuaciones from "./Puntuaciones";
 
@@ -11,7 +12,18 @@ const Board = () => {
   const itemsNeed = (boardSize * boardSize) / 2
   const [rowItems, setRowItems] = useState([])
   const [clicked, setClicked] = useState()
-  console.log(clicked)
+  const [coincidences, setCoincidences] = useState([])
+  const alreadyFounded = (id) => coincidences.includes(id)
+  const [finished, setGameFinished] = useState(false)
+  const [ganador, setGanador] = useState()
+
+  useEffect(() => {
+    if(coincidences.length === itemsNeed){
+      setGanador("Jugador 1")
+      setGameFinished(true)
+      }
+    }
+  ,[coincidences])
 
   useEffect(() => {
     const items = getRandom(itemsNeed)
@@ -22,20 +34,19 @@ const Board = () => {
   }, [singlePlayer, boardSize, itemsNeed, rowsCount])
 
   const hasConcidence = (id, rowPosition, callback, uniqueId) => {
-    if (clicked && (id !== clicked.id)) {
-      console.log(clicked.id)
-      console.log(id)
-      const removeRowPosition = clicked.rowPosition
-      const removeCallback = clicked.callback
-      setClicked(undefined)
-      removeCallback(removeRowPosition)
-      callback(rowPosition)
-    } else if (clicked && (id === clicked.id) && (uniqueId !== clicked.uniqueId)){
-      console.log(clicked.id)
-      console.log(id)
-      setClicked(undefined)
-    } else {
-      setClicked({id, rowPosition, callback, uniqueId})
+    if (!alreadyFounded(id)){
+      if (clicked && (id === clicked.id) && (uniqueId !== clicked.uniqueId)) {
+        setCoincidences([...coincidences,id])
+        setClicked(undefined)
+      } else if (clicked && (id !== clicked.id)){
+        setTimeout(() => {
+          callback(rowPosition)
+          clicked.callback(clicked.rowPosition)
+        }, [300]);
+        setClicked(undefined)
+      } else {
+        setClicked({id, rowPosition, callback, uniqueId})
+      }
     }
   }
 
@@ -44,9 +55,10 @@ const Board = () => {
       <Puntuaciones singlePlayer={singlePlayer}/>
       <div>
         {[...Array(rowsCount).keys()].map((r) => (
-          <BoardRow elementsCount={rowsCount} elements={rowItems[r]} hasConcidence={hasConcidence} />
+          <BoardRow elementsCount={rowsCount} key={`row-${r}`} elements={rowItems[r]} hasConcidence={hasConcidence} />
         ))}
       </div>
+      {finished && <GameFinished ganador={ganador}/> }
     </div>
   );
 };

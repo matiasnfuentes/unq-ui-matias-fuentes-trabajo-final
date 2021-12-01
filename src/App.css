@@ -1,20 +1,38 @@
-body{
-    height: 100vh;
+body {
+  height: 100vh;
 }
 
-.app{
-    height: 100vh;
+.app {
+  height: 100vh;
 }
 
-.element{
-    margin: 10px 5px 10px 5px;
+.element {
+  margin: 10px 5px 10px 5px;
 }
 
-.element__image{
-    border: 1px solid black;
-    border-radius: 15px;
+.element__image {
+  border: 1px solid black;
+  border-radius: 15px;
 }
 
-.element__image:hover{
-    transform: scale(1.2);
+.element__image:hover {
+  transform: scale(1.2);
+}
+
+.gameFinished {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  position: fixed;
+  width: 500px;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px; /* Negative half of height. */
+  margin-left: -250px; /* Negative half of width. */
+  border-radius: 30px;
+  padding: 30px;
+  border: 1px blue solid;
+  background-color: white;
 }

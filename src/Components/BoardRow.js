@@ -4,12 +4,10 @@ import Item from "./Item";
 const BoardRow = ({ elementsCount, elements, hasConcidence, gameNumber }) => {
   const elementSize = elementsCount === 4 ? "col-2" : "col-1";
 
-  const [imageList, setImageList] = useState(
-    [...Array(elementsCount)].map((e) => "./img/question.jpg")
-  );
+  const [imageList, setImageList] = useState([]);
 
   useEffect(() => {
-    setImageList([...Array(elementsCount)].map((e) => "./img/question.jpg"))
+    setImageList([...Array(elementsCount)].map(() => "./img/question.jpg"))
   }, [gameNumber])
 
   const callback = (rowPosition) => {
@@ -27,8 +25,7 @@ const BoardRow = ({ elementsCount, elements, hasConcidence, gameNumber }) => {
 
   return (
     <div className="row col-12 d-flex flex-row justify-content-between align-items-center">
-      {elements &&
-        elements !== [] &&
+      {imageList.length !== 0 &&
         elements.map((r, i) => (
           <Item
             key={r.uniqueId}
@@ -43,5 +40,3 @@ const BoardRow = ({ elementsCount, elements, hasConcidence, gameNumber }) => {
 };
 
 export default BoardRow;
-
-/**/

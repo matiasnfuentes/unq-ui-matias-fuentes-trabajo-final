@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { HashLoader } from "react-spinners";
 import GameFinished from "./GameFinished";
-import { getRandomRows } from "./Items";
+import { getRandomRows } from "../Data/Items";
 import Puntuaciones from "./Puntuaciones";
 import Rows from "./Rows";
 
@@ -32,7 +33,10 @@ const Board = () => {
       : setPlayerTwoPoints(playerTwoPoints + 1);
   };
 
-  const changeTurn = () => !singlePlayer && setCurrentTurn(oppositeTurn());
+  const changeTurn = () => {
+    !singlePlayer && setCurrentTurn(oppositeTurn());
+    setClicked(undefined);
+  };
 
   const playAgain = () => {
     setRowItems(getRandomRows(totalItems, boardSize, rowsCount));
@@ -41,15 +45,20 @@ const Board = () => {
     setPlayerOnePoints(0);
     setPlayerTwoPoints(0);
     setWinner();
-    setGameNumber(gameNumber + 1)
+    setGameNumber(gameNumber + 1);
   };
 
   useEffect(() => !boardSize && navigate("/"));
 
   useEffect(() => {
-    if (coincidences.length === totalItems) {
-      setWinner(playerOnePoints > playerTwoPoints ? 1 : 2);
-    }
+    coincidences.length === totalItems &&
+      setWinner(
+        playerOnePoints > playerTwoPoints
+          ? 1
+          : playerTwoPoints > playerOnePoints
+          ? 2
+          : 3
+      );
   }, [coincidences]);
 
   useEffect(() => {
@@ -60,15 +69,13 @@ const Board = () => {
     if (!alreadyFounded(id)) {
       if (clicked && id === clicked.id && uniqueId !== clicked.uniqueId) {
         increasePoints();
-        changeTurn();
         setCoincidences([...coincidences, id]);
-        setClicked(undefined);
+        changeTurn();
       } else if (clicked && id !== clicked.id) {
         setTimeout(() => {
           callback(rowPosition);
           clicked.callback(clicked.rowPosition);
         }, [300]);
-        setClicked(undefined);
         changeTurn();
       } else {
         setClicked({ id, rowPosition, callback, uniqueId });
@@ -85,14 +92,24 @@ const Board = () => {
         playerTwoPoints={playerTwoPoints}
         currentTurn={currentTurn}
       />
-      <div>
-        <Rows
-          rowItems={rowItems}
-          rowsCount={rowsCount}
-          hasConcidence={hasConcidence}
-          gameNumber={gameNumber}
+      {rowItems.length === 0 ? (
+        <HashLoader
+          color={"#0d6efd"}
+          loading={true}
+          css={"display: block; margin: 0 auto; border-color: red;"}
+          size={300}
         />
-      </div>
+      ) : (
+        <div>
+          <Rows
+            rowItems={rowItems}
+            rowsCount={rowsCount}
+            hasConcidence={hasConcidence}
+            gameNumber={gameNumber}
+          />
+        </div>
+      )}
+
       {winner && <GameFinished winner={winner} playAgain={playAgain} />}
     </div>
   );

@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 
 const SelectionScreen = () => {
   const [singlePlayer, setSinglePlayer] = useState(true);
+
   const singlePlayerStyle = singlePlayer
     ? "btn-primary"
     : "btn-outline-primary";
+
   const multiplayerStyle = !singlePlayer
     ? "btn-primary"
     : "btn-outline-primary";
@@ -21,7 +23,11 @@ const SelectionScreen = () => {
     <>
       <h1 className="text-center col-12">NBA Memory Game!</h1>
       <div className="mb-2 mt-2 col-12 col-lg-8 col-xl-7">
-        <img className={"img-fluid rounded-pill"} src="./img/nba-banner.jpg" alt="banner" />
+        <img
+          className={"img-fluid rounded-pill"}
+          src="./img/nba-banner.jpg"
+          alt="banner"
+        />
       </div>
 
       <div className="row col-xl-4 mb-5">

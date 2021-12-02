@@ -44,14 +44,22 @@ body {
     ),
     url("https://bigdatasports.media/wp-content/uploads/2021/10/NBA_75-e1625696659361-1024x606.jpg") no-repeat;
     background-position: center;
-    background-size: cover;
+    background-size: contain;
 }
 
 .board__imgage {
   opacity: 0.2;
 }
 
-@media (max-width: 768px) {
+.playerBlue{
+  color: blue;
+}
+
+.playerRed{
+  color: red;
+}
+
+@media (max-width: 425px) {
   .gameFinished {
     width: 350px;
     margin-left: -175px;

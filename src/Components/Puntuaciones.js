@@ -24,7 +24,7 @@ const Puntuaciones = ({
       {!singlePlayer && (
         <div className="row d-flex flex-row justify-content-around mb-5">
           <p className="fs-2 col-12 col-lg-5 col-xl-4 text-center">
-            <strong>Turno actual:</strong> Jugador {currentTurn}
+            <strong>Turno actual: <span className={currentTurn===1 ? "playerBlue" : "playerRed"}>Jugador {currentTurn}</span> </strong>
           </p>
 
           <p className={`fs-2 col-6 col-lg-3 col-xl-4 text-center`}>

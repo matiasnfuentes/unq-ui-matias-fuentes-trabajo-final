@@ -1,56 +1,66 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import BoardRow from "./BoardRow";
 import GameFinished from "./GameFinished";
-import getRandom from "./Items";
+import { getRandomRows } from "./Items";
 import Puntuaciones from "./Puntuaciones";
+import Rows from "./Rows";
 
 const Board = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const { singlePlayer, boardSize } = location.state || {};
   const rowsCount = boardSize || 4;
-  const itemsNeed = (boardSize * boardSize) / 2;
+  const totalItems = (boardSize * boardSize) / 2;
+
   const [rowItems, setRowItems] = useState([]);
   const [clicked, setClicked] = useState();
   const [coincidences, setCoincidences] = useState([]);
-  const alreadyFounded = (id) => coincidences.includes(id);
-  const [winner, setWinner] = useState();
   const [currentTurn, setCurrentTurn] = useState(1);
   const [playerOnePoints, setPlayerOnePoints] = useState(0);
-  const [playerTwoPoints, setPlayerOneTwo] = useState(0);
+  const [playerTwoPoints, setPlayerTwoPoints] = useState(0);
+  const [gameNumber, setGameNumber] = useState(0);
+  const [winner, setWinner] = useState();
+
+  const alreadyFounded = (id) => coincidences.includes(id);
 
   const oppositeTurn = () => (currentTurn === 1 ? 2 : 1);
 
-  const navigate = useNavigate();
+  const increasePoints = () => {
+    currentTurn === 1
+      ? setPlayerOnePoints(playerOnePoints + 1)
+      : setPlayerTwoPoints(playerTwoPoints + 1);
+  };
 
+  const changeTurn = () => !singlePlayer && setCurrentTurn(oppositeTurn());
 
-  useEffect( () => {
-    !boardSize && navigate("/")
-  })
+  const playAgain = () => {
+    setRowItems(getRandomRows(totalItems, boardSize, rowsCount));
+    setClicked();
+    setCoincidences([]);
+    setPlayerOnePoints(0);
+    setPlayerTwoPoints(0);
+    setWinner();
+    setGameNumber(gameNumber + 1)
+  };
+
+  useEffect(() => !boardSize && navigate("/"));
 
   useEffect(() => {
-    if (coincidences.length === itemsNeed) {
+    if (coincidences.length === totalItems) {
       setWinner(playerOnePoints > playerTwoPoints ? 1 : 2);
     }
   }, [coincidences]);
 
   useEffect(() => {
-    const items = getRandom(itemsNeed);
-    let shuffled = [...items, ...items].sort(() => 0.5 - Math.random());
-    shuffled = shuffled.map((i, index) => ({ ...i, uniqueId: index }));
-    const rows = [...Array(rowsCount).keys()].map((r) =>
-      shuffled.splice(0, boardSize)
-    );
-    setRowItems(rows);
-  }, [singlePlayer, boardSize, itemsNeed, rowsCount]);
+    setRowItems(getRandomRows(totalItems, boardSize, rowsCount));
+  }, [singlePlayer, boardSize, totalItems, rowsCount]);
 
   const hasConcidence = (id, rowPosition, callback, uniqueId) => {
     if (!alreadyFounded(id)) {
       if (clicked && id === clicked.id && uniqueId !== clicked.uniqueId) {
-        currentTurn === 1
-          ? setPlayerOnePoints(playerOnePoints + 1)
-          : setPlayerOneTwo(playerTwoPoints + 1);
-        !singlePlayer && setCurrentTurn(oppositeTurn());
+        increasePoints();
+        changeTurn();
         setCoincidences([...coincidences, id]);
         setClicked(undefined);
       } else if (clicked && id !== clicked.id) {
@@ -59,7 +69,7 @@ const Board = () => {
           clicked.callback(clicked.rowPosition);
         }, [300]);
         setClicked(undefined);
-        !singlePlayer && setCurrentTurn(oppositeTurn());
+        changeTurn();
       } else {
         setClicked({ id, rowPosition, callback, uniqueId });
       }
@@ -76,16 +86,14 @@ const Board = () => {
         currentTurn={currentTurn}
       />
       <div>
-        {[...Array(rowsCount).keys()].map((r) => (
-          <BoardRow
-            elementsCount={rowsCount}
-            key={`row-${r}`}
-            elements={rowItems[r]}
-            hasConcidence={hasConcidence}
-          />
-        ))}
+        <Rows
+          rowItems={rowItems}
+          rowsCount={rowsCount}
+          hasConcidence={hasConcidence}
+          gameNumber={gameNumber}
+        />
       </div>
-      {winner && <GameFinished winner={winner} />}
+      {winner && <GameFinished winner={winner} playAgain={playAgain} />}
     </div>
   );
 };

@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Item from "./Item";
 
-const BoardRow = ({ elementsCount, elements, hasConcidence }) => {
+const BoardRow = ({ elementsCount, elements, hasConcidence, gameNumber }) => {
   const elementSize = elementsCount === 4 ? "col-2" : "col-1";
 
   const [imageList, setImageList] = useState(
     [...Array(elementsCount)].map((e) => "./img/question.jpg")
   );
+
+  useEffect(() => {
+    setImageList([...Array(elementsCount)].map((e) => "./img/question.jpg"))
+  }, [gameNumber])
 
   const callback = (rowPosition) => {
     const newList = [...imageList];

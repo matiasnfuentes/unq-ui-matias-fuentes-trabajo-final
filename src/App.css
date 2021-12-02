@@ -37,7 +37,21 @@ body {
   background-color: white;
 }
 
-@media (max-width: 768px) { 
+.board {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.8),
+      rgba(255, 255, 255, 0.8)
+    ),
+    url("https://bigdatasports.media/wp-content/uploads/2021/10/NBA_75-e1625696659361-1024x606.jpg") no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.board__imgage {
+  opacity: 0.2;
+}
+
+@media (max-width: 768px) {
   .gameFinished {
     width: 350px;
     margin-left: -175px;

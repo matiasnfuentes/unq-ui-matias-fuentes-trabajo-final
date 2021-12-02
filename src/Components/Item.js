@@ -1,4 +1,5 @@
 const Item = ({ elementSize, image, rowPosition, handleClick }) => {
+
   return (
     <div className={`${elementSize} p-0 element`}>
       <img

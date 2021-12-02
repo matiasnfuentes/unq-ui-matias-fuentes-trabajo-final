@@ -19,7 +19,7 @@ const SelectionScreen = () => {
 
   return (
     <>
-      <h1>NBA Memory Game!</h1>
+      <h1 className="text-center col-12">NBA Memory Game!</h1>
       <div className="mb-2 mt-2 col-12 col-lg-8 col-xl-7">
         <img className={"img-fluid rounded-pill"} src="./img/nba-banner.jpg" alt="banner" />
       </div>

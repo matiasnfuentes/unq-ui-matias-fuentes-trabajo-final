@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import Item from "./Item";
 
-const BoardRow = ({ elementsCount, elements, hasConcidence, gameNumber }) => {
+const BoardRow = ({
+  elementsCount,
+  elements,
+  hasConcidence,
+  gameNumber,
+  turningBack,
+}) => {
   const elementSize = elementsCount === 4 ? "col-2" : "col-1";
 
   const [imageList, setImageList] = useState([]);
 
   useEffect(() => {
-    setImageList([...Array(elementsCount)].map(() => "./img/question.jpg"))
-  }, [gameNumber])
+    setImageList([...Array(elementsCount)].map(() => "./img/question.jpg"));
+  }, [gameNumber]);
 
   const callback = (rowPosition) => {
     const newList = [...imageList];
@@ -17,10 +23,12 @@ const BoardRow = ({ elementsCount, elements, hasConcidence, gameNumber }) => {
   };
 
   const handleClick = (i) => {
-    const newList = [...imageList];
-    newList[i] = elements[i].img;
-    setImageList(newList);
-    hasConcidence(elements[i].id, i, callback, elements[i].uniqueId);
+    if (!turningBack) {
+      const newList = [...imageList];
+      newList[i] = elements[i].img;
+      setImageList(newList);
+      hasConcidence(elements[i].id, i, callback, elements[i].uniqueId);
+    }
   };
 
   return (

@@ -22,6 +22,7 @@ const Board = () => {
   const [playerTwoPoints, setPlayerTwoPoints] = useState(0);
   const [gameNumber, setGameNumber] = useState(0);
   const [winner, setWinner] = useState();
+  const [turningBack, setTurningBack] = useState(false);
 
   const alreadyFounded = (id) => coincidences.includes(id);
 
@@ -72,10 +73,12 @@ const Board = () => {
         setCoincidences([...coincidences, id]);
         changeTurn();
       } else if (clicked && id !== clicked.id) {
+        setTurningBack(true)
         setTimeout(() => {
           callback(rowPosition);
           clicked.callback(clicked.rowPosition);
-        }, [300]);
+          setTurningBack(false)
+        }, [500]);
         changeTurn();
       } else {
         setClicked({ id, rowPosition, callback, uniqueId });
@@ -102,6 +105,7 @@ const Board = () => {
       ) : (
         <div>
           <Rows
+            turningBack={turningBack}
             rowItems={rowItems}
             rowsCount={rowsCount}
             hasConcidence={hasConcidence}
